@@ -101,9 +101,9 @@ collections:
     name: pages
     delete: false
     files:
-      - name: 404.md
-        label: ''
-        file: source/404.md
+      - name: archive-index.md
+        label: Archives
+        file: source/archive/index.md
         editor:
           preview: true
         fields: *ref_0
@@ -113,15 +113,15 @@ collections:
         editor:
           preview: true
         fields: *ref_0
-      - name: archive-index.md
-        label: Archives
-        file: source/archive/index.md
-        editor:
-          preview: true
-        fields: *ref_0
       - name: tags-index.md
         label: Tags
         file: source/tags/index.md
+        editor:
+          preview: true
+        fields: *ref_0
+      - name: 404.md
+        label: ''
+        file: source/404.md
         editor:
           preview: true
         fields: *ref_0
