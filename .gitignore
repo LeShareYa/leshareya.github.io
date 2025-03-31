@@ -5,3 +5,5 @@ node_modules/
 .deploy*/
 .vscode/
 package-lock.json
+db.json
+/public
