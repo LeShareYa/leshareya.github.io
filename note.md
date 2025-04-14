@@ -8,7 +8,7 @@
 
 ### hexo常用
 
-hexo n --lang zh-CN 我的博客 
+hexo n --lang cn 我的博客
 hexo g == hexo generate #生成
 hexo s == hexo server #启动服务预览
 hexo d == hexo deploy#部署

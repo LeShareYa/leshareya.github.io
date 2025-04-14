@@ -63,7 +63,7 @@ docker run -d --restart always --network host --name frps -v /home/frp/frps.ini:
 
 直接访问 `公网地址：7500` ， 输入账号密码就可直接访问
 
-![frpspng](1666107250515.png)
+![frpspng](通过FRP实现远程访问Mac桌面/1666107250515.png)
 
 ## 安装frps客户端
 
@@ -111,7 +111,7 @@ remote_port = 7088
 
 ![image-20221020001518067](通过FRP实现远程访问Mac桌面/image-20221020001518067.png)
 
-##  添加自动启动
+## 添加自动启动
 
 #### 4.1 将 frps 加入自动启动
 
