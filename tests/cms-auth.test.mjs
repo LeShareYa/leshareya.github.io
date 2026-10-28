@@ -9,7 +9,9 @@ async function start() {
   return { res, location, cookie: res.headers.get('Set-Cookie').split(';')[0] };
 }
 test('missing secrets fail closed; only production origin and GET allowed', async () => {
-  assert.equal((await auth(new Request(`${origin}/api/cms/auth?provider=github`), {})).status, 503);
+  const missing = await auth(new Request(`${origin}/api/cms/auth?provider=github`), { GITHUB_CLIENT_ID: 'configured' });
+  assert.equal(missing.status, 503);
+  assert.match(await missing.text(), /缺少：GITHUB_CLIENT_SECRET/);
   assert.equal((await auth(new Request('https://preview.pages.dev/api/cms/auth?provider=github'), env)).status, 403);
   assert.equal((await auth(new Request(`${origin}/api/cms/auth?provider=github`, {method:'POST'}), env)).status, 405);
 });
