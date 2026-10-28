@@ -8,8 +8,6 @@ subtitle: This is hexo theme
 author: Licer
 timezone:
 
-netlify_cms:
-  config_file: netlify.yaml
 
 
 
@@ -27,7 +25,7 @@ langselect:
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: https://leshareya.gitee.io/ #Note: don't forget to modify the CNAME file to your url
+url: https://leshareya.com/ #Note: don't forget to modify the CNAME file to your url
 root: /
 permalink: :lang/:year/:month/:day/:title/
 permalink_defaults:
@@ -183,6 +181,9 @@ category_dir: categories
 code_dir: downloads/code
 i18n_dir: :lang
 skip_render:
+  - "admin/**"
+  - "_headers"
+  - "_routes.json"
 
 
 # Writing

@@ -512,3 +512,39 @@ hexo deploy   # hexo will push the static files automatically into the specific 
 
 ## 有一个好的体验 ^\_^
 如果你喜欢该主题，请 [Star](https://github.com/V-Vincen/hexo-theme-livemylife)！不胜感激你的 [Follow](https://github.com/V-Vincen)！比心！
+
+## 在线写作后台（Decap CMS）
+
+后台地址：<https://leshareya.com/admin/>。文章保存在 GitHub 仓库
+`LeShareYa/leshareya.github.io` 的 `source` 分支；已有文章目录保持不变。
+新文章默认放在 `source/_posts/cn/`，也可以选择日期子目录。
+草稿和审核使用 Decap editorial workflow，发布后合并到 `source`，
+由现有 Cloudflare Pages 项目 `leshareya-github-io` 自动运行 `npm run build`。
+生产网站不依赖 GitHub 的 `master` 分支。
+
+### 首次开通 GitHub 登录
+
+1. 在 <https://github.com/settings/developers> 创建 OAuth App：
+   - Application name：`LeShareYa Blog CMS`
+   - Homepage URL：`https://leshareya.com/admin/`
+   - Authorization callback URL：`https://leshareya.com/api/cms/callback`
+2. 在 Cloudflare Pages 项目 `leshareya-github-io` 的 Settings → Variables and Secrets，
+   为 Production 添加 `GITHUB_CLIENT_ID` 和加密的 `GITHUB_CLIENT_SECRET`。
+   不要将 Client Secret 写入仓库、前端配置或聊天。
+3. 重新部署 `source` 分支以应用环境变量，再打开后台用拥有仓库写权限的 GitHub 账号登录。
+   预览域名不允许生产 OAuth 登录。缺少密钥时回调服务返回明确的 503 提示。
+
+登录接口在 `functions/api/cms/`，使用 state、PKCE 和短时 HttpOnly Cookie，
+成功后检查 GitHub 仓库写权限，只向 `https://leshareya.com` 的后台窗口传递授权结果。
+该公开仓库使用 `public_repo` OAuth scope。
+
+### 图片与构建
+
+上传图片保存在 `source/images/uploads/`，页面引用 `/images/uploads/`。
+发布构建只压缩该目录输出中的 JPEG/WebP 照片（最大边 1920 像素，质量 82），
+保留仓库原图和文件名；PNG 截图与 GIF 保持原样，避免文字失真或动画丢失。
+编辑器脚本从站内 `/admin/vendor/` 加载，不注入博客首页。
+
+使用 Node.js 24.19.0，运行 `npm ci` 安装锁定的依赖，`npm run test:cms` 检查认证逻辑，
+`npm run clean && npm run build` 生成网站。`npm run server` 仅提供静态 Hexo 预览，
+不会运行 Cloudflare Pages 登录函数。

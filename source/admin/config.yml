@@ -1,0 +1,43 @@
+backend:
+  name: github
+  repo: LeShareYa/leshareya.github.io
+  branch: source
+  base_url: https://leshareya.com
+  auth_endpoint: api/cms/auth
+site_url: https://leshareya.com
+locale: zh_Hans
+publish_mode: editorial_workflow
+media_folder: source/images/uploads
+public_folder: /images/uploads
+slug:
+  encoding: unicode
+  clean_accents: false
+collections:
+  - name: posts
+    label: 文章
+    label_singular: 文章
+    folder: source/_posts
+    create: true
+    extension: md
+    format: yaml-frontmatter
+    slug: '{{slug}}'
+    nested:
+      depth: 10
+      subfolders: false
+      summary: '{{title}}'
+    meta:
+      path: {widget: string, label: 保存目录, default: cn}
+    summary: '{{title}} · {{date}}'
+    sortable_fields: [date, title]
+    fields:
+      - {label: 标题, name: title, widget: string}
+      - {label: 语言, name: lang, widget: select, options: [cn, en, tw], default: cn}
+      - {label: 发布时间, name: date, widget: datetime, format: 'YYYY-MM-DD HH:mm:ss', date_format: 'YYYY-MM-DD', time_format: 'HH:mm:ss'}
+      - {label: 更新时间, name: updated, widget: datetime, format: 'YYYY-MM-DD HH:mm:ss', required: false}
+      - {label: 标签, name: tags, widget: list, required: false}
+      - {label: 分类, name: categories, widget: list, required: false}
+      - {label: 封面图片, name: header-img, widget: image, required: false}
+      - {label: 文章目录, name: catalog, widget: boolean, default: true, required: false}
+      - {label: 允许评论, name: comments, widget: boolean, default: true, required: false}
+      - {label: 固定链接, name: permalink, widget: string, required: false}
+      - {label: 正文, name: body, widget: markdown}

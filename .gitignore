@@ -4,6 +4,8 @@ Thumbs.db
 node_modules/
 .deploy*/
 .vscode/
-package-lock.json
 db.json
 /public
+
+.dev.vars
+.wrangler/
