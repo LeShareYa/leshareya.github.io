@@ -49,3 +49,19 @@ test('accounts without write access do not receive a CMS token',async()=>{
   const res=await callback(new Request(`${origin}/api/cms/callback?code=ok&state=${location.searchParams.get('state')}`,{headers:{Cookie:cookie}}),env,async()=>Response.json(++calls===1?{access_token:'dummy-token'}:{permissions:{push:false}}));
   assert.equal(res.status,403);assert.ok(!(await res.text()).includes('dummy-token'));
 });
+test('fallback channel is tied to the OAuth cookie, not the GitHub redirect', async () => {
+  const channel = 'ab'.repeat(24);
+  const res = await auth(new Request(`${origin}/api/cms/auth?provider=github&channel=${channel}`), env);
+  assert.equal(res.status, 302);
+  assert.equal(new URL(res.headers.get('Location')).searchParams.has('channel'), false);
+  assert.ok(res.headers.get('Set-Cookie').includes(channel));
+  const rejected = await auth(new Request(`${origin}/api/cms/auth?provider=github&channel=invalid`), env);
+  assert.equal(rejected.status, 400);
+  const state = new URL(res.headers.get('Location')).searchParams.get('state');
+  let calls = 0;
+  const result = await callback(new Request(`${origin}/api/cms/callback?code=ok&state=${state}`, { headers: { Cookie: res.headers.get('Set-Cookie').split(';')[0] } }), env, async () => Response.json(++calls === 1 ? { access_token: 'mock-token' } : { permissions: { push: true } }));
+  const html = await result.text();
+  assert.match(html, /BroadcastChannel/);
+  assert.ok(html.includes(channel));
+  assert.ok(!html.includes(env.GITHUB_CLIENT_SECRET));
+});
