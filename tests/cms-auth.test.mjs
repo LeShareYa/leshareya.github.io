@@ -62,6 +62,7 @@ test('fallback channel is tied to the OAuth cookie, not the GitHub redirect', as
   const result = await callback(new Request(`${origin}/api/cms/callback?code=ok&state=${state}`, { headers: { Cookie: res.headers.get('Set-Cookie').split(';')[0] } }), env, async () => Response.json(++calls === 1 ? { access_token: 'mock-token' } : { permissions: { push: true } }));
   const html = await result.text();
   assert.match(html, /BroadcastChannel/);
+  assert.match(html, /<script data-cfasync="false" nonce=/);
   assert.ok(html.includes(channel));
   assert.ok(!html.includes(env.GITHUB_CLIENT_SECRET));
 });
